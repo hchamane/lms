@@ -1,0 +1,11 @@
+version: '3'
+services:
+  lms:
+    build:
+      context: .
+      target: debug
+    volumes:
+      - .:/app
+    ports:
+      - 5001:5001
+      - 5678:5678
