@@ -33,6 +33,7 @@ def create_user() -> tuple[Response, Literal[422] | Literal[201]]:
 
 
 @user_domain.get("/list")
+@authorize_admin
 def get_all_users() -> tuple[Response, Literal[200]]:
     users = User.query.all()
 
@@ -50,6 +51,7 @@ def get_all_users() -> tuple[Response, Literal[200]]:
 
 
 @user_domain.get("/<int:user_id>")
+@authorize_admin
 def get_user(user_id) -> tuple[Response, Literal[200]] | tuple[Response, Literal[422]]:
     """Get details of a user."""
     user = User.get(user_id)

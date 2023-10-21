@@ -1,4 +1,7 @@
 import json
+import os
+
+from tests.conftest import AUTH_TOKEN_PATH
 
 
 class TestApp:
@@ -66,3 +69,12 @@ class TestApp:
         assert data == {
             "message": "An error occured while trying to log-in, please double check your credentials and try again."
         }
+
+    def test_logout(self, client, admin_user) -> None:
+        assert os.path.exists(AUTH_TOKEN_PATH)
+        response = client.put("/logout")
+        data = json.loads(response.data)
+
+        assert response.status_code == 200
+        assert data == {"message": "Successfully logged-out of the app"}
+        assert not os.path.exists(AUTH_TOKEN_PATH)

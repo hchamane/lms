@@ -17,7 +17,9 @@ def cli(ctx) -> None:
         click.echo("Available actions:")
         click.echo("1. Login to the app")
         click.echo("2. Register a new user")
-        click.echo("3. Exit")
+        click.echo("3. List all current users")
+        click.echo("4. Logout")
+        click.echo("5. Exit")
 
         choice = click.prompt("Please select an action", type=int)
 
@@ -26,6 +28,10 @@ def cli(ctx) -> None:
         elif choice == 2:
             register_user()
         elif choice == 3:
+            list_all_users()
+        elif choice == 4:
+            logout()
+        elif choice == 5:
             click.echo("Exiting...")
             break
         else:
@@ -68,6 +74,40 @@ def login() -> None:
 
     response = requests.post(f"{API_BASE_URL}/login", json=user_data)
 
+    data = response.json()
+    message = data.get("message")
+    click.echo(message)
+    click.echo("")
+
+
+def list_all_users() -> None:
+    """List all available users in the system"""
+
+    response = requests.get(f"{API_BASE_URL}/users/list")
+    data = response.json()
+
+    if isinstance(data, dict):
+        message = data.get("message")
+        click.echo(message)
+    else:
+        start_number = 1
+
+        click.echo("")
+        click.echo("Current users in the system:")
+        for user in data:
+            click.echo(
+                f'- User {start_number}. first name: {user.get("first_name")}, '
+                f'last name: {user.get("last_name")}, username: {user.get("username")}'
+            )
+            start_number += 1
+
+    click.echo("")
+
+
+def logout() -> None:
+    """Log out of the app"""
+    click.echo("")
+    response = requests.put(f"{API_BASE_URL}/logout")
     data = response.json()
     message = data.get("message")
     click.echo(message)
