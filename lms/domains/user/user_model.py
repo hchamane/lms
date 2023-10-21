@@ -9,7 +9,7 @@ from lms.adapters import BaseMixin, db
 
 class UserRole(enum.Enum):
     ADMIN = 1
-    TEATCHER = 2
+    TEACHER = 2
     STUDENT = 3
 
 

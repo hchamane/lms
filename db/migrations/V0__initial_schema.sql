@@ -16,7 +16,9 @@ CREATE TABLE modules (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    teacher_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+    teacher_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- create assignment table
@@ -25,7 +27,9 @@ CREATE TABLE assignments (
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
-    due_date DATE
+    due_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- create grade table

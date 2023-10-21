@@ -50,6 +50,27 @@ def wipe_users_table(db) -> Generator:
 
 
 @pytest.fixture
+def wipe_modules_table(db) -> Generator:
+    yield
+    db.session.execute(text("TRUNCATE modules CASCADE;"))
+    db.session.commit()
+
+
+@pytest.fixture
+def wipe_assignments_table(db) -> Generator:
+    yield
+    db.session.execute(text("TRUNCATE assignments CASCADE;"))
+    db.session.commit()
+
+
+@pytest.fixture
+def wipe_grades_table(db) -> Generator:
+    yield
+    db.session.execute(text("TRUNCATE grades CASCADE;"))
+    db.session.commit()
+
+
+@pytest.fixture
 def admin_user(db) -> Generator:
     admin_user = UserFactory.create()
     update_token(admin_user.auth_token)
