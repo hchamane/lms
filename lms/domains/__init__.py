@@ -1,6 +1,6 @@
 from .assigment import Assignment
 from .grade import Grade
-from .module import Module
+from .module import Module, module_domain
 from .user import User, UserRole, UserService, user_domain
 
-__all__ = ["Assignment", "Grade", "User", "UserRole", "user_domain", "UserService", "Module"]
+__all__ = ["Assignment", "Grade", "User", "UserRole", "user_domain", "UserService", "Module", "module_domain"]

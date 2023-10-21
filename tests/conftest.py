@@ -10,7 +10,7 @@ from sqlalchemy import text
 from lms.adapters import db as _db
 from lms.app import app as _app
 from lms.common import HERE
-from tests.factories import UserFactory
+from tests.factories import StudentFactory, TeacherFactory, UserFactory
 
 AUTH_TOKEN_PATH = f"{HERE}/../.auth"
 
@@ -79,8 +79,16 @@ def admin_user(db) -> Generator:
 
 
 @pytest.fixture
+def teacher_user(db) -> Generator:
+    admin_user = TeacherFactory.create()
+    update_token(admin_user.auth_token)
+
+    yield admin_user
+
+
+@pytest.fixture
 def student_user(db) -> Generator:
-    student_user = UserFactory.create(role_id=3)
+    student_user = StudentFactory.create()
     update_token(student_user.auth_token)
 
     yield student_user

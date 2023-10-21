@@ -77,3 +77,9 @@ class User(BaseMixin, db.Model):
 
     def is_admin(self) -> bool:
         return self.role_id == UserRole.ADMIN.value
+
+    def is_teacher(self) -> bool:
+        return self.role_id == UserRole.TEACHER.value
+
+    def is_student(self) -> bool:
+        return self.role_id == UserRole.STUDENT.value
