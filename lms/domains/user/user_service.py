@@ -1,8 +1,13 @@
-from typing import Literal
+import os
+import secrets
+
+from typing import Final, Literal
 
 import bcrypt
 
 from .user_model import User, UserRole
+
+HERE: Final[str] = os.path.dirname(os.path.realpath(__file__))
 
 
 class UserService:
@@ -31,11 +36,12 @@ class UserService:
 
         User.create(
             username=username,
-            password=hashed_password,
+            password=hashed_password.decode("utf-8"),
             role_id=role_id,
             first_name=first_name,
             last_name=last_name,
             email=email,
+            auth_token=secrets.token_hex(24),
         )
 
         return f"User with email {email} successfully created", 201
@@ -66,3 +72,19 @@ class UserService:
             pass
 
         return message, status_code
+
+    def login(
+        self, username: str, password: str
+    ) -> tuple[Literal["Succesfully logged-in"], Literal[200]] | tuple[str, Literal[422]]:
+        user = User.find_by(username=username)
+
+        if user:
+            user_password = password.encode("utf-8")
+            if bcrypt.checkpw(user_password, user.password.encode("utf-8")):
+                # For simplicity in the CLI, we store the user auth token in the file
+                # We wouldn't do this in a production system
+                with open(f"{HERE}/../../../.auth", "w") as file:
+                    file.write(user.auth_token)
+                return "Succesfully logged-in", 200
+
+        return "An error occured while trying to log-in, please double check your credentials and try again.", 422

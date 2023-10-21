@@ -15,3 +15,4 @@ class UserFactory(BaseFactory):
     email = factory.Faker("email")
     password = factory.Faker("password")
     role_id = UserRole.ADMIN.value
+    auth_token = factory.Faker("password")

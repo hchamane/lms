@@ -23,6 +23,7 @@ class User(BaseMixin, db.Model):
     first_name: str = db.Column(db.String, nullable=False)
     last_name: str = db.Column(db.String, nullable=False)
     email: str = db.Column(db.String, unique=True, nullable=False)
+    auth_token: str = db.Column(db.String(255), unique=True)
 
     def __init__(
         self,
@@ -32,6 +33,7 @@ class User(BaseMixin, db.Model):
         first_name: str,
         last_name: str,
         email: str,
+        auth_token: str,
     ) -> None:
         self.username = username
         self.password = password
@@ -39,16 +41,11 @@ class User(BaseMixin, db.Model):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.auth_token = auth_token
 
     @classmethod
     def create(
-        cls,
-        username: str,
-        password: str,
-        role_id: int,
-        first_name: str,
-        last_name: str,
-        email: str,
+        cls, username: str, password: str, role_id: int, first_name: str, last_name: str, email: str, auth_token: str
     ) -> "User":
         user = cls(
             username=username,
@@ -57,6 +54,7 @@ class User(BaseMixin, db.Model):
             first_name=first_name,
             last_name=last_name,
             email=email,
+            auth_token=auth_token,
         )
         db.session.add(user)
         db.session.commit()

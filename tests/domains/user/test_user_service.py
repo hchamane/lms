@@ -74,3 +74,33 @@ class TestUserService:
 
         assert message == "You've specified an invalid role, please double check the parameters and try again"
         assert status == 422
+
+    def test_user_login(self) -> None:
+        hashed_password = "$2b$12$nWgf5G0gVy.gTz2vK2IPSe.PeCHr2yRZPybuLY19ZOC9qlavSVi7y"  # equals to `test`
+
+        user = UserFactory.create(password=hashed_password)
+
+        message, status = UserService().login(username=user.username, password="test")
+
+        assert message == "Succesfully logged-in"
+        assert status == 200
+
+    def test_user_login_with_invalid_username(self) -> None:
+        hashed_password = "$2b$12$nWgf5G0gVy.gTz2vK2IPSe.PeCHr2yRZPybuLY19ZOC9qlavSVi7y"  # equals to `test`
+
+        UserFactory.create(password=hashed_password)
+
+        message, status = UserService().login(username="Invalid Username", password="test")
+
+        assert message == "An error occured while trying to log-in, please double check your credentials and try again."
+        assert status == 422
+
+    def test_user_login_with_invalid_password(self) -> None:
+        hashed_password = "$2b$12$nWgf5G0gVy.gTz2vK2IPSe.PeCHr2yRZPybuLY19ZOC9qlavSVi7y"  # equals to `test`
+
+        user = UserFactory.create(password=hashed_password)
+
+        message, status = UserService().login(username=user.username, password="invalid")
+
+        assert message == "An error occured while trying to log-in, please double check your credentials and try again."
+        assert status == 422

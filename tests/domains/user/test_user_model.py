@@ -17,9 +17,10 @@ class TestUserModel:
     def test_user_init_with_missing_value(self) -> None:
         with pytest.raises(TypeError) as error:
             User()
+
         assert str(error.value) == (
-            "__init__() missing 6 required positional arguments: 'username', 'password',"
-            " 'role_id', 'first_name', 'last_name', and 'email'"
+            "__init__() missing 7 required positional arguments: 'username', 'password', "
+            "'role_id', 'first_name', 'last_name', 'email', and 'auth_token'"
         )
 
     def test_user_create(self) -> None:
@@ -31,6 +32,7 @@ class TestUserModel:
             first_name=user.first_name,
             last_name=user.last_name,
             email=user.email,
+            auth_token=user.auth_token,
         )
 
         assert isinstance(created_user, User)
