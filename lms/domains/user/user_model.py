@@ -74,3 +74,6 @@ class User(BaseMixin, db.Model):
             raise ValueError("Invalid params")
 
         return self
+
+    def is_admin(self) -> bool:
+        return self.role_id == UserRole.ADMIN.value

@@ -1,7 +1,5 @@
 import json
 
-from tests.factories import UserFactory
-
 
 class TestApp:
     def test_root(self, client) -> None:

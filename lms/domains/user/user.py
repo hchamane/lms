@@ -1,10 +1,16 @@
-from typing import Literal
+import os
+
+from typing import Final, Literal
 
 from flask import Blueprint, Response, jsonify, request
 from werkzeug.exceptions import BadRequest
 
+from lms.common import authorize_admin
+
 from .user_model import User
 from .user_service import UserService
+
+HERE: Final[str] = os.path.dirname(os.path.realpath(__file__))
 
 user_domain = Blueprint("user_domain", __name__, url_prefix="/users")
 
@@ -65,6 +71,7 @@ def get_user(user_id) -> tuple[Response, Literal[200]] | tuple[Response, Literal
 
 
 @user_domain.put("/<int:user_id>")
+@authorize_admin
 def update_user(user_id) -> tuple[Response, Literal[422, 200]]:
     """Update user details."""
     user_data = {}
