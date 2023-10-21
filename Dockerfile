@@ -26,6 +26,12 @@ ENV FLASK_DEBUG 1
 
 ENTRYPOINT ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "-m", "flask", "run", "-h", "0.0.0.0", "-p", "5001"]
 
+FROM base AS tests
+RUN python3 -m pip install -r tests/requirements.txt
+ENV FLASK_ENV testing
+
+ENTRYPOINT ["python3", "-m", "pytest"]
+
 FROM base AS production
 ENV FLASK_ENV production
 

@@ -26,12 +26,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
         python3 -m pip install -r requirements.txt -r tests/requirements.txt
     - name: Lint with ruff
       run: |
         # Stop the build if there are Python syntax errors or undefined names
         ruff check . && python3 -m black . && isort .
-    - name: Test with pytest
+    - name: Run tests
       run: |
-        python3 -m pytest -v
+        cp .env.example .env
+        docker-compose build tests
+        docker-compose up tests --exit-code-from tests

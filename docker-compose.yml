@@ -1,6 +1,7 @@
 version: '3'
 services:
   lms:
+    container_name: lms
     build:
       context: .
       target: debug
@@ -40,6 +41,21 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  tests:
+    container_name: tests
+    build:
+      context: .
+      target: tests
+    volumes:
+      - .:/app
+    ports:
+      - 5001:5001
+    links:
+      - postgres
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
 
 volumes:
   postgres:
