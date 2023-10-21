@@ -62,3 +62,26 @@ class TestUser:
             data.get("message")
             == f"User with email {user.email} already exists, please double check the parameters and try again"
         )
+
+    def test_list_all_users(self, client) -> None:
+        user = UserFactory.create()
+
+        response = client.get("/users/list")
+        data = json.loads(response.data)
+
+        assert data == [
+            {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "role_id": 1,
+                "username": user.username,
+            }
+        ]
+
+        UserFactory.create()
+
+        response = client.get("/users/list")
+        data = json.loads(response.data)
+
+        assert len(data) == 2

@@ -1,5 +1,7 @@
 import enum
 
+from dataclasses import dataclass
+
 from lms.adapters import BaseMixin, db
 
 
@@ -9,6 +11,7 @@ class UserRole(enum.Enum):
     STUDENT = 3
 
 
+@dataclass
 class User(BaseMixin, db.Model):
     __tablename__ = "users"
 

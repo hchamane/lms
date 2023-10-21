@@ -13,7 +13,5 @@ for domain in (user_domain,):
 
 
 @app.get("/")
-@app.get("/status")
-def check_status() -> Response:
-    commit_id = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip().decode("utf-8")
-    return jsonify({"sha": commit_id, "status": "up"})
+def root() -> Response:
+    return jsonify({"message": "hi!", "status": "up"})

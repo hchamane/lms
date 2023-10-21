@@ -44,6 +44,8 @@ services:
 
   tests:
     container_name: tests
+    profiles:
+      - donotstart
     build:
       context: .
       target: tests
