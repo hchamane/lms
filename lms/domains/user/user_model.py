@@ -3,6 +3,7 @@ import enum
 from dataclasses import dataclass
 
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import relationship
 
 from lms.adapters import BaseMixin, db
 
@@ -24,6 +25,7 @@ class User(BaseMixin, db.Model):
     last_name: str = db.Column(db.String, nullable=False)
     email: str = db.Column(db.String, unique=True, nullable=False)
     auth_token: str = db.Column(db.String(255), unique=True)
+    grades = relationship("Grade", backref="users")
 
     def __init__(
         self,

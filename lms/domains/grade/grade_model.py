@@ -14,7 +14,7 @@ class Grade(BaseMixin, db.Model):
     assignment_id: int = db.Column(db.Integer, ForeignKey("assignments.id"), nullable=True)
     score: float = db.Column(Float, nullable=False)
 
-    student = relationship("User", backref="grades")
+    student = relationship("User")
     assignment = relationship("Assignment", backref="grades")
 
     def __init__(self, score: float, student_id: int, assignment_id: int) -> None:

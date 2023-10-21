@@ -5,7 +5,7 @@ from typing import Final, Literal
 from flask import Response, jsonify, request
 from werkzeug.exceptions import BadRequest
 
-from lms.domains import UserService, assignment_domain, module_domain, user_domain
+from lms.domains import UserService, assignment_domain, grade_domain, module_domain, user_domain
 from lms.make_app import make_app
 
 HERE: Final[str] = os.path.dirname(os.path.realpath(__file__))
@@ -14,7 +14,7 @@ AUTH_TOKEN_PATH = f"{HERE}/../.auth"
 app = make_app()
 
 
-for domain in (assignment_domain, module_domain, user_domain):
+for domain in (assignment_domain, grade_domain, module_domain, user_domain):
     app.register_blueprint(domain)
 
 
