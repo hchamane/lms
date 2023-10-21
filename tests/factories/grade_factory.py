@@ -2,7 +2,7 @@ import factory
 
 from lms.domains import Grade
 
-from .assigment_factory import AssignmentFactory
+from .assignment_factory import AssignmentFactory
 from .base import BaseFactory
 from .user_factory import StudentFactory
 
