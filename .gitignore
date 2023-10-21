@@ -32,3 +32,4 @@ reports/**
 results.xml
 .venv
 .ruff_cache/
+.env

@@ -8,6 +8,11 @@ This project is the repository for the LMS application.
 
 Make sure you have docker running locally, otherwise download the desktop application from the docker [website](https://www.docker.com/products/docker-desktop/).
 
+Create the config file:
+```bash
+cp .env.example .env
+```
+
 Spin up compose:
 ```bash
 docker compose up
@@ -33,6 +38,12 @@ Create a launch.json file inside .vscode if you want hot-reload and debugging:
         }
     ]
 }
+```
+
+Run the tests:
+
+```bash
+docker exec -it lms-lms-1 python3 -m pytest -v
 ```
 
 You're good to go 🎉

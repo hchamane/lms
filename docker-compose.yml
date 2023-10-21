@@ -9,3 +9,38 @@ services:
     ports:
       - 5001:5001
       - 5678:5678
+    links:
+      - postgres
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+
+  postgres:
+    image: postgres:15.4
+    environment:
+      POSTGRES_DB: "lms"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "r00t66"
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d lms"]
+      interval: 2s
+      timeout: 1s
+      retries: 10
+
+  migrations:
+    image: flyway/flyway:8.5
+    command: >
+      -url=jdbc:postgresql://postgres:5432/lms -user=root -password=r00t66 info
+      -url=jdbc:postgresql://postgres:5432/lms -user=root -password=r00t66 clean
+      -url=jdbc:postgresql://postgres:5432/lms -user=root -password=r00t66 migrate -locations=filesystem:/flyway/sql
+    volumes:
+      - ${PWD}/db/migrations:/flyway/sql
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres:
+  migrations:
