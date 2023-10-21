@@ -7,6 +7,7 @@ services:
       target: debug
     volumes:
       - .:/app
+    entrypoint: ./entrypoint.sh
     ports:
       - 5001:5001
       - 5678:5678

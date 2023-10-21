@@ -16,6 +16,7 @@ user_domain = Blueprint("user_domain", __name__, url_prefix="/users")
 
 
 @user_domain.post("/create")
+@authorize_admin
 def create_user() -> tuple[Response, Literal[422] | Literal[201]]:
     """Create a new user."""
 

@@ -43,7 +43,13 @@ Create a launch.json file inside .vscode if you want hot-reload and debugging:
 Run the tests:
 
 ```bash
-docker exec -it lms-lms-1 python3 -m pytest -v
+docker exec -it lms python3 -m pytest -v
+```
+
+Launch the CLI App:
+By default, we create a admin user for ease of use, (username: admin, password: admin)
+```bash
+docker exec -it lms python3 cli.py
 ```
 
 You're good to go 🎉

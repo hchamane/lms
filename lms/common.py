@@ -13,20 +13,23 @@ def authorize_admin(function) -> Any:
     def check_user_auth(*args, **kwargs) -> Any:
         access_token = None
 
-        with open(f"{HERE}/../.auth", "r") as file:
-            access_token = file.read().strip()
+        try:
+            with open(f"{HERE}/../.auth", "r") as file:
+                access_token = file.read().strip()
+        except FileNotFoundError:
+            pass
 
         current_user = User.find_by(auth_token=access_token)
 
         if not current_user:
             return {
-                "error": "It appears you provided an invalid token. "
+                "message": "It appears you provided an invalid token. "
                 "Please double-check your authorization and try again."
             }, 401
 
         if not current_user.is_admin():
             return {
-                "error": "It appears you are not authorised to perform this action. "
+                "message": "It appears you are not authorised to perform this action. "
                 "Please double-check your authorization and try again."
             }, 401
 

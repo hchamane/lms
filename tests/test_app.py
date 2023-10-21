@@ -13,7 +13,7 @@ class TestApp:
         assert data["message"] == "hi!"
         assert data["status"] == "up"
 
-    def test_login(self, client) -> None:
+    def test_login(self, client, admin_user) -> None:
         username = "john"
         password = "password"
 

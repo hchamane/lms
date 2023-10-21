@@ -26,7 +26,7 @@ class TestUser:
         assert response.status_code == 201
         assert data.get("message") == f"User with email {user.email} successfully created"
 
-    def test_create_user_with_missing_argument(self, client) -> None:
+    def test_create_user_with_missing_argument(self, client, admin_user) -> None:
         user = UserFactory.build()
 
         params = {
@@ -43,7 +43,7 @@ class TestUser:
         assert response.status_code == 422
         assert data.get("message") == "Something does't look right, lease double check the parameters and try again"
 
-    def test_create_user_with_existing_email_address(self, client) -> None:
+    def test_create_user_with_existing_email_address(self, client, admin_user) -> None:
         user = UserFactory.create()
 
         params = {
@@ -155,7 +155,7 @@ class TestUser:
         data = json.loads(response.data)
 
         assert data == {
-            "error": (
+            "message": (
                 "It appears you are not authorised to perform this action. "
                 "Please double-check your authorization and try again."
             )
