@@ -1,5 +1,3 @@
-import subprocess
-
 from flask import Response, jsonify
 
 from lms.domains import user_domain
