@@ -64,20 +64,15 @@ def get_user(user_id) -> tuple[Response, Literal[200]] | tuple[Response, Literal
     return jsonify({"message": "No user found, please try again"}), 422
 
 
-# @user_domain.put("/<int:user_id>")
-# def update_user(user_id):
-#     """Update user details."""
-#     user = next((u for u in users_db if u["id"] == user_id), None)
-#     if not user:
-#         return jsonify({"message": "User not found!"}), 404
-#     updated_data = request.json
-#     user.update(updated_data)
-#     return jsonify({"message": "User updated successfully!", "user": user}), 200
+@user_domain.put("/<int:user_id>")
+def update_user(user_id) -> tuple[Response, Literal[422, 200]]:
+    """Update user details."""
+    user_data = {}
 
+    try:
+        user_data = request.json
+    except BadRequest:
+        pass
 
-# @user_domain.delete("/<int:user_id>")
-# def delete_user(user_id):
-#     """Delete a user."""
-#     global users_db
-#     users_db = [u for u in users_db if u["id"] != user_id]
-#     return jsonify({"message": "User deleted successfully!"}), 200
+    message, status = UserService().update(user_id=user_id, params=user_data)
+    return jsonify({"message": message}), status

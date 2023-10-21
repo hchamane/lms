@@ -2,6 +2,8 @@ import enum
 
 from dataclasses import dataclass
 
+from sqlalchemy.exc import IntegrityError
+
 from lms.adapters import BaseMixin, db
 
 
@@ -59,3 +61,18 @@ class User(BaseMixin, db.Model):
         db.session.add(user)
         db.session.commit()
         return user
+
+    def update(self, update_params: dict) -> "User":
+        self.username = update_params.get("username", self.username)
+        self.role_id = update_params.get("role_id", self.role_id)
+        self.first_name = update_params.get("first_name", self.first_name)
+        self.last_name = update_params.get("last_name", self.last_name)
+        self.email = update_params.get("email", self.email)
+
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            raise ValueError("Invalid params")
+
+        return self

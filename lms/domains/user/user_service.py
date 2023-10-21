@@ -39,3 +39,30 @@ class UserService:
         )
 
         return f"User with email {email} successfully created", 201
+
+    def update(self, user_id: int, params: dict[str, str | int]) -> tuple[str, Literal[422] | Literal[200]]:
+        message = "An error occured while trying to update the user, please try again"
+        status_code = 422
+        user = User.get(user_id)
+
+        role = params.get("role")
+
+        if not user:
+            return "We couldn't find the specified user, please try again", 422
+
+        if role:
+            try:
+                role_id = UserRole[role.upper()].value
+                params["role_id"] = role_id
+                del params["role"]
+            except KeyError:
+                return "You've specified an invalid role, please double check the parameters and try again", 422
+
+        try:
+            user.update(update_params=params)
+            message = "User succesfully updated"
+            status_code = 200
+        except ValueError:
+            pass
+
+        return message, status_code

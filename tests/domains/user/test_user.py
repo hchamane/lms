@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from lms.domains import User
 from tests.factories import UserFactory
 
 
@@ -106,4 +107,37 @@ class TestUser:
         data = json.loads(response.data)
 
         assert data == {"message": "No user found, please try again"}
+        assert response.status_code == 422
+
+    def test_update_user(self, client) -> None:
+        user = UserFactory.create(first_name="John")
+
+        user = User.get(user.id)
+        assert user.first_name == "John"
+
+        response = client.put(f"/users/{user.id}", json={"first_name": "Bob"})
+
+        data = json.loads(response.data)
+
+        assert data == {"message": "User succesfully updated"}
+        assert response.status_code == 200
+
+        user = User.get(user.id)
+        assert user.first_name == "Bob"
+
+    def test_update_user_with_non_existing_user_id(self, client) -> None:
+        response = client.put("/users/8374198364", json={"first_name": "Bob"})
+
+        data = json.loads(response.data)
+
+        assert data == {"message": "We couldn't find the specified user, please try again"}
+        assert response.status_code == 422
+
+    def test_update_user_with_invalid_role(self, client) -> None:
+        user = UserFactory.create()
+        response = client.put(f"/users/{user.id}", json={"role": "invalid"})
+
+        data = json.loads(response.data)
+
+        assert data == {"message": "You've specified an invalid role, please double check the parameters and try again"}
         assert response.status_code == 422

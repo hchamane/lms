@@ -37,3 +37,16 @@ class TestUserModel:
         assert created_user.first_name == user.first_name
         assert created_user.last_name == user.last_name
         assert created_user.email == user.email
+
+    def test_user_update(self) -> None:
+        user = UserFactory.create()
+        updated_user = user.update({"first_name": "updated name"})
+        assert isinstance(updated_user, User)
+        assert updated_user.first_name == "updated name"
+
+    def test_user_update_if_email_already_exists_rollback(self) -> None:
+        user = UserFactory.create()
+        another_user = UserFactory.create()
+
+        with pytest.raises(ValueError):
+            another_user.update({"email": user.email})
