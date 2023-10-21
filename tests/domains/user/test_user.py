@@ -85,3 +85,25 @@ class TestUser:
         data = json.loads(response.data)
 
         assert len(data) == 2
+
+    def test_get_single_user(self, client) -> None:
+        user = UserFactory.create()
+
+        response = client.get(f"/users/{user.id}")
+        data = json.loads(response.data)
+
+        assert response.status_code == 200
+        assert data == {
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "role_id": 1,
+            "username": user.username,
+        }
+
+    def test_get_single_user_with_no_matching_users(self, client) -> None:
+        response = client.get("/users/8486814619864")
+        data = json.loads(response.data)
+
+        assert data == {"message": "No user found, please try again"}
+        assert response.status_code == 422

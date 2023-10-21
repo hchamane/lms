@@ -42,13 +42,26 @@ def get_all_users() -> tuple[Response, Literal[200]]:
     return jsonify(users), 200
 
 
-# @user_domain.get("/<int:user_id>")
-# def get_user(user_id):
-#     """Get details of a user."""
-#     user = next((u for u in users_db if u["id"] == user_id), None)
-#     if not user:
-#         return jsonify({"message": "User not found!"}), 404
-#     return jsonify(user), 200
+@user_domain.get("/<int:user_id>")
+def get_user(user_id) -> tuple[Response, Literal[200]] | tuple[Response, Literal[422]]:
+    """Get details of a user."""
+    user = User.get(user_id)
+
+    if user:
+        return (
+            jsonify(
+                {
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "username": user.username,
+                    "role_id": user.role_id,
+                }
+            ),
+            200,
+        )
+
+    return jsonify({"message": "No user found, please try again"}), 422
 
 
 # @user_domain.put("/<int:user_id>")
