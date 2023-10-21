@@ -34,5 +34,5 @@ jobs:
     - name: Run tests
       run: |
         cp .env.example .env
-        docker-compose build tests
-        docker-compose up tests
+        docker compose build tests
+        docker compose up tests --exit-code-from tests
