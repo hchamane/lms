@@ -5,7 +5,7 @@ from typing import Final, Literal
 from flask import Blueprint, Response, jsonify, request
 from werkzeug.exceptions import BadRequest
 
-from lms.common import authorise_admin
+from lms.common import authorise_admin, authorise_admin_or_teacher
 
 from .user_model import User
 from .user_service import UserService
@@ -33,7 +33,7 @@ def create_user() -> tuple[Response, Literal[422] | Literal[201]]:
 
 
 @user_domain.get("/list")
-@authorise_admin
+@authorise_admin_or_teacher
 def get_all_users() -> tuple[Response, Literal[200]]:
     users = User.query.all()
 
