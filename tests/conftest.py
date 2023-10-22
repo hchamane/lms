@@ -71,6 +71,13 @@ def wipe_grades_table(db) -> Generator:
 
 
 @pytest.fixture
+def wipe_feature_switch_table(db) -> Generator:
+    yield
+    db.session.execute(text("TRUNCATE feature_switches;"))
+    db.session.commit()
+
+
+@pytest.fixture
 def admin_user(db) -> Generator:
     admin_user = UserFactory.create()
     update_token(admin_user.auth_token)
