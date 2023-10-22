@@ -3,7 +3,7 @@ import json
 import pytest
 
 from lms.domains import User, UserRole
-from tests.factories import UserFactory
+from tests.factories import StudentFactory, UserFactory
 
 
 @pytest.mark.usefixtures("wipe_users_table")
@@ -184,3 +184,32 @@ class TestUser:
             )
         }
         assert response.status_code == 401
+
+    def test_list_all_students_as_a_teacher(self, client, teacher_user) -> None:
+        StudentFactory.create()
+        StudentFactory.create()
+
+        response = client.get("/users/list_students")
+        data = json.loads(response.data)
+
+        assert isinstance(data, list)
+        assert len(data) >= 1
+        assert "id" in data[0]
+        assert "first_name" in data[0]
+        assert "last_name" in data[0]
+
+    def test_list_all_students_as_a_student(self, client, student_user) -> None:
+        StudentFactory.create()
+        StudentFactory.create()
+
+        response = client.get("/users/list_students")
+        data = json.loads(response.data)
+
+        assert response.status_code == 401
+
+        assert data == {
+            "message": (
+                "It appears you are not authorised to perform this action. "
+                "Please double-check your authorization and try again."
+            )
+        }

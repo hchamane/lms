@@ -86,3 +86,21 @@ def update_user(user_id) -> tuple[Response, Literal[422, 200]]:
 
     message, status = UserService().update(user_id=user_id, params=user_data)
     return jsonify({"message": message}), status
+
+
+@user_domain.get("/list_students")
+@authorise_admin_or_teacher
+def list_all_students() -> tuple[Response, Literal[200]]:
+    """List all the current students"""
+
+    students = User.query.where(User.role_id == 3).all()
+
+    students = [
+        {
+            "id": student.id,
+            "first_name": student.first_name,
+            "last_name": student.last_name,
+        }
+        for student in students
+    ]
+    return jsonify(students), 200

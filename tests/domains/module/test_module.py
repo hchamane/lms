@@ -55,7 +55,7 @@ class TestModule:
         assert "id" in data[0]
         assert "title" in data[0]
 
-    def test_list_all_users_as_a_student(self, client, student_user) -> None:
+    def test_list_all_modules_as_a_student(self, client, student_user) -> None:
         ModuleFactory.create()
         ModuleFactory.create()
 

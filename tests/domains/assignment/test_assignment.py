@@ -59,3 +59,31 @@ class TestAssignment:
             "It appears you are not authorised to perform this action. "
             "Please double-check your authorization and try again."
         )
+
+    def test_list_all_assignments_as_a_teacher(self, client, teacher_user) -> None:
+        AssignmentFactory.create()
+        AssignmentFactory.create()
+
+        response = client.get("/assignments/list")
+        data = json.loads(response.data)
+
+        assert isinstance(data, list)
+        assert len(data) >= 1
+        assert "id" in data[0]
+        assert "title" in data[0]
+
+    def test_list_all_users_as_a_student(self, client, student_user) -> None:
+        AssignmentFactory.create()
+        AssignmentFactory.create()
+
+        response = client.get("/assignments/list")
+        data = json.loads(response.data)
+
+        assert response.status_code == 401
+
+        assert data == {
+            "message": (
+                "It appears you are not authorised to perform this action. "
+                "Please double-check your authorization and try again."
+            )
+        }

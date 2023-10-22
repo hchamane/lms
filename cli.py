@@ -167,6 +167,34 @@ def create_assignment() -> None:
 
 def submit_grade() -> None:
     """Submit a grade."""
+
+    click.echo("List of available students")
+    response = requests.get(f"{API_BASE_URL}/users/list_students")
+    data = response.json()
+
+    if isinstance(data, dict):
+        message = data.get("message")
+        click.echo(message)
+    else:
+        click.echo("")
+        click.echo("Current students in the system:")
+        for student in data:
+            click.echo(
+                f'- Student ID: {student.get("id")}. Name: {student.get("first_name")} - {student.get("last_name")}'
+            )
+
+    response = requests.get(f"{API_BASE_URL}/assignments/list")
+    data = response.json()
+
+    if isinstance(data, dict):
+        message = data.get("message")
+        click.echo(message)
+    else:
+        click.echo("")
+        click.echo("Current assigments in the system:")
+        for assignment in data:
+            click.echo(f'- Assignment ID: {assignment.get("id")}. Title: {assignment.get("title")}')
+
     student_id = click.prompt("Please enter the student ID", type=int)
     assignment_id = click.prompt("Please enter the assignment ID", type=int)
     score = click.prompt("Please enter the score", type=float)
@@ -174,7 +202,8 @@ def submit_grade() -> None:
 
     grade_data = {"student_id": student_id, "assignment_id": assignment_id, "score": score}
 
-    response = requests.post(f"{API_BASE_URL}/grades/submit", json=grade_data)
+    response = requests.post(f"{API_BASE_URL}/grades/create", json=grade_data)
+
     data = response.json()
     message = data.get("message")
     click.echo(message)
