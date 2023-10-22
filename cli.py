@@ -133,6 +133,23 @@ def create_module() -> None:
 
 def create_assignment() -> None:
     """Create a new assignment."""
+    click.echo("List of available modules to add an assignment to")
+
+    response = requests.get(f"{API_BASE_URL}/modules/list")
+
+    data = response.json()
+
+    if isinstance(data, dict):
+        message = data.get("message")
+        click.echo(message)
+    else:
+        click.echo("")
+        click.echo("Current modules in the system:")
+        for module in data:
+            click.echo(f'- Module ID: {module.get("id")}. Title: {module.get("title")}')
+
+    click.echo("")
+
     title = click.prompt("Please enter the assignment title", type=str)
     description = click.prompt("Please enter the assignment description", type=str)
     module_id = click.prompt("Please enter the module ID", type=int)
