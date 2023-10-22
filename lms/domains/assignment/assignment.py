@@ -5,7 +5,7 @@ from typing import Final, Literal
 from flask import Blueprint, Response, jsonify, request
 from werkzeug.exceptions import BadRequest
 
-from lms.decorators import authorize_teacher
+from lms.decorators import authorise_teacher
 
 from .assignment_service import AssignmentService
 
@@ -15,7 +15,7 @@ assignment_domain = Blueprint("assignment_domain", __name__, url_prefix="/assign
 
 
 @assignment_domain.post("/create")
-@authorize_teacher
+@authorise_teacher
 def create_assignment(current_user) -> tuple[Response, Literal[422] | Literal[201]]:
     """Create a new assignment"""
 

@@ -5,7 +5,7 @@ from typing import Final, Literal
 from flask import Blueprint, Response, jsonify, request
 from werkzeug.exceptions import BadRequest
 
-from lms.common import authorize_admin
+from lms.common import authorise_admin
 
 from .user_model import User
 from .user_service import UserService
@@ -16,7 +16,7 @@ user_domain = Blueprint("user_domain", __name__, url_prefix="/users")
 
 
 @user_domain.post("/create")
-@authorize_admin
+@authorise_admin
 def create_user() -> tuple[Response, Literal[422] | Literal[201]]:
     """Create a new user."""
 
@@ -33,7 +33,7 @@ def create_user() -> tuple[Response, Literal[422] | Literal[201]]:
 
 
 @user_domain.get("/list")
-@authorize_admin
+@authorise_admin
 def get_all_users() -> tuple[Response, Literal[200]]:
     users = User.query.all()
 
@@ -51,7 +51,7 @@ def get_all_users() -> tuple[Response, Literal[200]]:
 
 
 @user_domain.get("/<int:user_id>")
-@authorize_admin
+@authorise_admin
 def get_user(user_id) -> tuple[Response, Literal[200]] | tuple[Response, Literal[422]]:
     """Get details of a user."""
     user = User.get(user_id)
@@ -74,7 +74,7 @@ def get_user(user_id) -> tuple[Response, Literal[200]] | tuple[Response, Literal
 
 
 @user_domain.put("/<int:user_id>")
-@authorize_admin
+@authorise_admin
 def update_user(user_id) -> tuple[Response, Literal[422, 200]]:
     """Update user details."""
     user_data = {}

@@ -8,7 +8,7 @@ from lms.domains.user.user_model import User
 HERE: Final[str] = os.path.dirname(os.path.realpath(__file__))
 
 
-def authorize_admin(function) -> Any:
+def authorise_admin(function) -> Any:
     @wraps(function)
     def check_user_auth(*args, **kwargs) -> Any:
         access_token = None

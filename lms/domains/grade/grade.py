@@ -5,7 +5,7 @@ from typing import Final
 from flask import Blueprint, Response, jsonify, request
 from werkzeug.exceptions import BadRequest
 
-from lms.decorators import authorize_student_or_teacher, authorize_teacher
+from lms.decorators import authorise_teacher, authorise_user
 
 from .grade_service import GradeService
 
@@ -15,7 +15,7 @@ grade_domain = Blueprint("grade_domain", __name__, url_prefix="/grades")
 
 
 @grade_domain.post("/create")
-@authorize_teacher
+@authorise_teacher
 def create_grade(current_user) -> tuple[Response, int]:
     """Create a new grade"""
 
@@ -32,7 +32,7 @@ def create_grade(current_user) -> tuple[Response, int]:
 
 
 @grade_domain.get("/view")
-@authorize_student_or_teacher
+@authorise_user
 def view_grades(current_user) -> tuple[Response, int]:
     """View all the grades for a student"""
 
